@@ -8,7 +8,7 @@ By default the code will run on Rinkeby Nework
 
  ### Clone the Respository 
   
-   git clone https://github.com/naveedh27/propertyTransferDapp.git
+   git clone https://github.com/naveedh27/NoWorthCoin.git
 
  ### Install Node modules
 
