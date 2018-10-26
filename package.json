@@ -4,7 +4,6 @@
   "private": true,
   "homepage": "https://naveedh27.github.io/NoWorthCoin",
   "dependencies": {
-    "gh-pages": "^2.0.1",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-router-dom": "^4.3.1",
@@ -19,10 +18,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "compile": "node Ethereum/compile.js",
-    "deploy": "node Ethereum/deploy.js",
+    "compileContract": "node Ethereum/compile.js",
+    "deployContract": "node Ethereum/deploy.js",
     "predeploy": "npm run build",
-    "deployGH" : "gh-pages -d build"
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
@@ -31,6 +30,7 @@
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
     "eslint-plugin-react": "^7.11.1",
-    "solc": "^0.4.24"
+    "solc": "^0.4.24",
+    "gh-pages": "^2.0.1"
   }
 }
