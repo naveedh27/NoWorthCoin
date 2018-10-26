@@ -1,0 +1,7 @@
+.textbox input{
+    text-align: center ! important
+  }
+
+  input[type="number"] {
+    text-align: right !important;
+  }
