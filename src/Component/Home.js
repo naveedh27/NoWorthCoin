@@ -188,6 +188,7 @@ export default class Home extends Component {
                                             color='black'
                                             loading={this.state.isLoading}
                                             onClick={this.sendCoin}
+                                            disabled={this.state.isLoadingMint}
                                             width={6}
                                             type='submit'>Send</Button>
                                     </Form>
@@ -204,6 +205,7 @@ export default class Home extends Component {
                                     <Button
                                         onClick={this.mintCoin}
                                         loading={this.state.isLoadingMint}
+                                        disabled={this.state.isLoading}
                                         color='black'>Get Coins</Button>
                                 </Grid.Row>
                             </Grid.Column>
