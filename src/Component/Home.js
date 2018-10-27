@@ -21,6 +21,8 @@ export default class Home extends Component {
     }
 
     getCoinCount = async () => {
+
+        console.log('get coin called');
         try {
             this.setState({ isLoading: true });
             const acc = await web3.eth.getAccounts();
@@ -32,10 +34,10 @@ export default class Home extends Component {
             this.setState({ noOfTokens });
 
         } catch (e) {
-
+            this.setState({ isLoading: false,isLoadingMint:false });
         }
         
-        this.setState({ isLoading: false });
+        this.setState({ isLoading: false, isLoadingMint : false });
     }
 
     async componentWillMount() {
@@ -95,21 +97,21 @@ export default class Home extends Component {
     mintCoin = async () => {
         this.setState({ isLoadingMint: true });
         try {
-            instance.methods.mintToken().send({
+            const minted = await instance.methods.mintToken().send({
                 from: this.state.address,
                 gas: 300000,
                 value: 100000000000000
             }).then((result) => {
                 this.getCoinCount();
                 this.setState({ isLoadingMint: false });
-            });
+            })
 
         } catch (e) {
-
+            console.log('Mint coin Catch')
+            this.setState({ isLoadingMint: false });
         }
 
-        console.log('Outer')
-        // this.setState({ isLoadingMint: false });
+        //this.setState({ isLoadingMint: false });
     }
 
     handleInputChange = (event) => {
