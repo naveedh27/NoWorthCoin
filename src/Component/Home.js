@@ -20,6 +20,15 @@ export default class Home extends Component {
         }
     }
 
+    getCountAtIntreval = async() => {
+
+        const noOfTokens = await instance.methods._wallet(this.state.address).call({
+            from: this.state.address
+        });
+        this.setState({ noOfTokens });
+
+    }
+
     getCoinCount = async () => {
 
         console.log('get coin called');
@@ -104,6 +113,7 @@ export default class Home extends Component {
             }).then((result) => {
                 this.getCoinCount();
                 this.setState({ isLoadingMint: false });
+                setInterval(this.getCountAtIntreval , 5000);
             })
 
         } catch (e) {
@@ -118,12 +128,7 @@ export default class Home extends Component {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
-        // if (name === 'toAddress') {
-        //     if (this.state.address === value) {
-        //         alert('To Address Cannot be Same Address');
-        //         return;
-        //     }
+        
         if (name === 'tokensToSend') {
             if (value < 0) {
                 alert('Tokens to Send must be more than zero');
