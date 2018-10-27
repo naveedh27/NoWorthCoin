@@ -5,15 +5,15 @@ const fs = require('fs-extra');
 const compiledFactory = require('./build/NoWorthCoin.json');
 
 
-const provider = new WALLETPROVIDER(
-  'soldier ice act culture uniform stereo census worth creek try grief mass',
-  'https://rinkeby.infura.io/v3/5a2e60a731254049a9ab4ef748a7eba3'
-);
-
 // const provider = new WALLETPROVIDER(
 //   'soldier ice act culture uniform stereo census worth creek try grief mass',
-//   'http://localhost:8545'
+//   'https://rinkeby.infura.io/v3/5a2e60a731254049a9ab4ef748a7eba3'
 // );
+
+const provider = new WALLETPROVIDER(
+  'soldier ice act culture uniform stereo census worth creek try grief mass',
+  'http://localhost:8545'
+);
 
 const web3 = new Web3(provider);
 

@@ -42,18 +42,30 @@ export default class Home extends Component {
     }
 
     sendCoin = async () => {
+
+
+        if (this.state.tokensToSend == 0) {
+            alert("Number Of Tokens must be atleast one");
+            return;
+        } else if (this.state.toAddress === '') {
+            alert("To Address Cannot be Empty");
+            return;
+        }
+
         this.setState({ isLoading: true });
+
         try {
-            const isTrue = await instance.methods.sendToken(this.state.toAddress, this.state.tokensToSend).send({
+            const getBalanceCount = await instance.methods.sendToken(this.state.toAddress, this.state.tokensToSend).call({
                 from: this.state.address
             });
-            if (isTrue) {
+            if (getBalanceCount) {
                 this.setState({
                     noOfTokens: this.state.noOfTokens - this.state.tokensToSend,
                     toAddress: '',
-                    tokensToSend: 0
+                    tokensToSend: 0,
+                    noOfTokens: getBalanceCount
                 });
-                this.getCoinCount();
+
             }
 
         } catch (e) {
@@ -83,6 +95,18 @@ export default class Home extends Component {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
+
+        if (name === 'toAddress') {
+            if (this.state.address === value) {
+                alert('To Address Cannot be Same Address');
+                return;
+            }
+        } else if (name === 'tokensToSend') {
+            if (value <= 0) {
+                alert('Tokens to Send must be more than zero');
+                return;
+            }
+        }
 
         this.setState({
             [name]: value

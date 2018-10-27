@@ -26,7 +26,7 @@ contract NoWorthCoin {
             
     }
     
-    function sendToken(address _to, uint8 _tokenCount) public returns(bool){
+    function sendToken(address _to, uint8 _tokenCount) public returns(uint8){
         
         require(_wallet[msg.sender] >= _tokenCount);
         require(_tokenCount > 0);
@@ -34,7 +34,7 @@ contract NoWorthCoin {
         _wallet[_to] += _tokenCount; 
         _wallet[msg.sender] -= _tokenCount;
         
-        return true;
+        return _wallet[msg.sender];
     }
     
     
