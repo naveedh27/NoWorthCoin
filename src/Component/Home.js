@@ -45,13 +45,16 @@ export default class Home extends Component {
     sendCoin = async () => {
 
 
-        if (this.state.tokensToSend == 0) {
+        if (Number(this.state.tokensToSend) == 0) {
             alert("Number Of Tokens must be atleast one");
+            this.setState({
+                tokensToSend: 1
+            });
             return;
-        }else if (this.state.tokensToSend > this.state.noOfTokens ) {
+        }else if ( Number(this.state.tokensToSend) > Number(this.state.noOfTokens) ) {
             alert("You don't have Sufficient Coins");
             this.setState({
-                tokensToSend: 0
+                tokensToSend: 1
             });
             return;
         } else if (this.state.toAddress === '') {
@@ -62,12 +65,15 @@ export default class Home extends Component {
         this.setState({ isLoading: true });
 
         try {
-            const getBalanceCount = await instance.methods.sendToken(this.state.toAddress, this.state.tokensToSend).send({
+            const getBalanceCount = await instance.methods.sendToken(this.state.toAddress, 
+                                                    this.state.tokensToSend).send({
                 from: this.state.address
+            }).then((result) => {
+                this.getCoinCount();
+                this.setState({ isLoading: false });
             });
             if (getBalanceCount.status) {
                 this.setState({
-                    noOfTokens: this.state.noOfTokens - this.state.tokensToSend,
                     toAddress: '',
                     tokensToSend: 0
                 });
@@ -77,13 +83,12 @@ export default class Home extends Component {
             }
 
         } catch (e) {
-            
+            console.log('sendCoin Exception');
+            this.setState({ isLoading: false });
         }
         this.setState({
-            noOfTokens: this.state.noOfTokens - this.state.tokensToSend,
             toAddress: '',
-            tokensToSend: 0,
-            isLoading: false
+            tokensToSend: 0
         });
     }
 
@@ -97,8 +102,7 @@ export default class Home extends Component {
             }).then((result) => {
                 this.getCoinCount();
                 this.setState({ isLoadingMint: false });
-            }
-            );
+            });
 
         } catch (e) {
 
@@ -113,14 +117,17 @@ export default class Home extends Component {
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
-        if (name === 'toAddress') {
-            if (this.state.address === value) {
-                alert('To Address Cannot be Same Address');
-                return;
-            }
-        } else if (name === 'tokensToSend') {
-            if (value <= 0) {
+        // if (name === 'toAddress') {
+        //     if (this.state.address === value) {
+        //         alert('To Address Cannot be Same Address');
+        //         return;
+        //     }
+        if (name === 'tokensToSend') {
+            if (value < 0) {
                 alert('Tokens to Send must be more than zero');
+                this.setState({
+                    tokensToSend: 1
+                });
                 return;
             }
         }
