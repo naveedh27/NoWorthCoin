@@ -34,6 +34,7 @@ export default class Home extends Component {
         } catch (e) {
 
         }
+        
         this.setState({ isLoading: false });
     }
 
@@ -47,6 +48,12 @@ export default class Home extends Component {
         if (this.state.tokensToSend == 0) {
             alert("Number Of Tokens must be atleast one");
             return;
+        }else if (this.state.tokensToSend > this.state.noOfTokens ) {
+            alert("You don't have Sufficient Coins");
+            this.setState({
+                tokensToSend: 0
+            });
+            return;
         } else if (this.state.toAddress === '') {
             alert("To Address Cannot be Empty");
             return;
@@ -55,40 +62,50 @@ export default class Home extends Component {
         this.setState({ isLoading: true });
 
         try {
-            const getBalanceCount = await instance.methods.sendToken(this.state.toAddress, this.state.tokensToSend).call({
+            const getBalanceCount = await instance.methods.sendToken(this.state.toAddress, this.state.tokensToSend).send({
                 from: this.state.address
             });
-            if (getBalanceCount) {
+            if (getBalanceCount.status) {
                 this.setState({
                     noOfTokens: this.state.noOfTokens - this.state.tokensToSend,
                     toAddress: '',
-                    tokensToSend: 0,
-                    noOfTokens: getBalanceCount
+                    tokensToSend: 0
                 });
 
+            }else{
+                alert("Error in Contract Call.");
             }
 
         } catch (e) {
-
+            
         }
-        this.setState({ isLoading: false });
+        this.setState({
+            noOfTokens: this.state.noOfTokens - this.state.tokensToSend,
+            toAddress: '',
+            tokensToSend: 0,
+            isLoading: false
+        });
     }
 
     mintCoin = async () => {
         this.setState({ isLoadingMint: true });
         try {
-            const isTrue = await instance.methods.mintToken().send({
+            instance.methods.mintToken().send({
                 from: this.state.address,
                 gas: 300000,
                 value: 100000000000000
-            });
-            if (isTrue) {
+            }).then((result) => {
                 this.getCoinCount();
+                this.setState({ isLoadingMint: false });
             }
+            );
+
         } catch (e) {
 
         }
-        this.setState({ isLoadingMint: false });
+
+        console.log('Outer')
+        // this.setState({ isLoadingMint: false });
     }
 
     handleInputChange = (event) => {
@@ -147,7 +164,7 @@ export default class Home extends Component {
                             <Grid.Column>
                                 <Grid.Row centered>
                                     <Header textAlign='center'>
-                                        Send To
+                                        Send Coins
                                  </Header>
                                 </Grid.Row>
                                 <Grid.Row>

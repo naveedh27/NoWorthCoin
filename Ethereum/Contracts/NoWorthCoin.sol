@@ -9,21 +9,21 @@ contract NoWorthCoin {
     
     mapping(address => uint8) public _wallet;
     
-    constructor() public{
+    function NoWorthCoin() public {
         _owner = msg.sender;
         _wallet[_owner] = 10;
         _currentAvailable = _currentAvailable - 10;
     }
     
     //Send 0.0001 Ether
-    function mintToken() public payable{
+    function mintToken() public payable returns(uint8){
         
         require(_currentAvailable >=10 );
         require(msg.value == 100000000000000 );
         _wallet[msg.sender] += 10;
         _currentAvailable -= 10;
         
-            
+        return _wallet[msg.sender];    
     }
     
     function sendToken(address _to, uint8 _tokenCount) public returns(uint8){
